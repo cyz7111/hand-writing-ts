@@ -16,7 +16,7 @@ function myInstanceOf(example,classFunc){
     let ex_proto=Object.getPrototypeOf(example)
     let cl_prototype=classFunc.prototype
 
-    console.log('classFunc',classFunc,cl_prototype);
+    console.log('classFunc',ex_proto,cl_prototype);//{}  {}
     
     while(true){
 
@@ -25,7 +25,8 @@ function myInstanceOf(example,classFunc){
         if(ex_proto==cl_prototype) return true;
 
         ex_proto=Object.getPrototypeOf(ex_proto);
-    }
+        console.log('ex_proto',ex_proto);
+    } 
 
 }
 
@@ -43,7 +44,7 @@ result=''
 
 
 // result=myInstanceOf(d,Object)
-result=myInstanceOf(e,Number)
+result=myInstanceOf(e,String)
 // result=myInstanceOf(c,Array)
 // result=myInstanceOf(g,Function)
 // result=myInstanceOf(h,String)

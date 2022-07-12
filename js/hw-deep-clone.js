@@ -8,11 +8,13 @@
  */
 
 
-// 要拷贝的数据类型
+// 要拷贝的变量所对应的数据类型
 const getType = obj => Object.prototype.toString.call(obj);
 
+// true-对象,数组,函数,new 变量  false-null,...
 const isObject = (target) => (typeof target === 'object' || typeof target === 'function') && target !== null;
 
+//可遍历的对象集
 const canTraverse = {
     '[object Map]': true,
     '[object Set]': true,
@@ -20,8 +22,11 @@ const canTraverse = {
     '[object Object]': true,
     '[object Arguments]': true,
 };
+
 const mapTag = '[object Map]';
 const setTag = '[object Set]';
+
+//不可遍历or不用遍历的对象标签
 const boolTag = '[object Boolean]';
 const numberTag = '[object Number]';
 const stringTag = '[object String]';
@@ -31,6 +36,7 @@ const errorTag = '[object Error]';
 const regexpTag = '[object RegExp]';
 const funcTag = '[object Function]';
 
+//拷贝正则
 const handleRegExp = (target) => {
     const {
         source,
@@ -39,6 +45,7 @@ const handleRegExp = (target) => {
     return new target.constructor(source, flags);
 }
 
+//拷贝函数
 const handleFunc = (func) => {
     // 箭头函数直接返回自身
     if (!func.prototype) return func;
@@ -59,6 +66,9 @@ const handleFunc = (func) => {
 
 const handleNotTraverse = (target, tag) => {
     const Ctor = target.constructor;
+
+    console.log('Ctor',Ctor,new Ctor(target));
+
     switch (tag) {
         case boolTag:
             return new Object(Boolean.prototype.valueOf.call(target));
@@ -84,9 +94,12 @@ const handleNotTraverse = (target, tag) => {
 // 第一条规则，weakmap只接受object作为key，第二条规则是它只保存对对象的弱引用。
 
 const myDeepClone = (target, map = new WeakMap()) => {
+
     if (!isObject(target))
         return target;
+
     let type = getType(target);
+
     let cloneTarget;
 
     if (!canTraverse[type]) {
@@ -100,6 +113,7 @@ const myDeepClone = (target, map = new WeakMap()) => {
 
     if (map.get(target))
         return target;
+
     map.set(target, true);
 
     if (type === mapTag) {
@@ -116,7 +130,7 @@ const myDeepClone = (target, map = new WeakMap()) => {
         })
     }
 
-    // 处理数组和对象
+    // 处理可遍历的对象
     for (let prop in target) {
         if (target.hasOwnProperty(prop)) {
             cloneTarget[prop] = myDeepClone(target[prop], map);
@@ -137,12 +151,17 @@ let a = null,
     g = function () {
         console.log(2);
     },
-    h = '123232'
-j = () => {
+    h = '123232',
+    j = () => {
         console.log(3);
     },
+    reg = /^[0-9]$/,
+    date = new Date(),
+    sym = Symbol(),
+    nMap=new Map(),
+    nSet=new Set()
     result = ''
 
-result = myDeepClone(c)
+result = myDeepClone(d)
 
 console.log(result);
