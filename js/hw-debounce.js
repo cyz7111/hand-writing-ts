@@ -5,6 +5,8 @@
  * 
  * 表单事件，滚动事件，鼠标事件，按钮点击，窗口变化
  * 
+ * 怎么解析?
+ * 
  */
 
 function myDebounce(func, wait = 2000) {
